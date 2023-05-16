@@ -11,7 +11,9 @@ In manual system when patient approaches multiple medical treatment at different
 So, the main objective of this system is  to help patients carry their health records electronically and be able to share those records with the doctors in order to ease the doctor’s job to effectively take care of the patient based on those records.
 
 ii. Project Plan
+
 Scope
+
 In my project I have planned to deal on two parts which are web application and android application but because of time constraints I’m able to work on web application only.
 
 So,at this time  my system will deal with many functions but the main are that i will register some main master data, patient personal information, patient medical records and the medical records  that are supposed to be accessed by the patient and by the doctor using web application.
@@ -20,9 +22,11 @@ My system also registers this kind of medical information: biometrics data, cons
 
 
 Limitations
+
 In this system i want to deal with all kind of hospitals but for now we don’t support to deal of all kind of hospitals, my system doesn’t have model led way of registering medicine, we also don’t deal with hospitalization, also in my web application there is some master data that doesn’t have UI like departments, exams, roles. i put them in database. 
 
 Assumptions
+
 In this system i will deal with patient with national Ids and all hospitals must have access to the internet.
 Hardware requirements
 Processor: Intel Pentium 4 or above
