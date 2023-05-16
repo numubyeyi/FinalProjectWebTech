@@ -23,12 +23,14 @@ My system also registers this kind of medical information: biometrics data, cons
 
 Limitations
 
-In this system i want to deal with all kind of hospitals but for now we don’t support to deal of all kind of hospitals, my system doesn’t have model led way of registering medicine, we also don’t deal with hospitalization, also in my web application there is some master data that doesn’t have UI like departments, exams, roles. i put them in database. 
+In this system i want to deal with all kind of hospitals but for now i don’t support to deal of all kind of hospitals, my system doesn’t have model led way of registering medicine, i also don’t deal with hospitalization, also in my web application there is some master data that doesn’t have UI like departments, exams, roles. i put them in database. 
 
 Assumptions
 
 In this system i will deal with patient with national Ids and all hospitals must have access to the internet.
+
 Hardware requirements
+
 Processor: Intel Pentium 4 or above
 Processor speed: 1.4 GHz or above
 Hard disk: 40 GB or above 
