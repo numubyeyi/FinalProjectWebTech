@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="common/header :: common-header"></head>
+<body class="hold-transition skin-blue fixed layout-top-nav">
+	<div class="wrapper">
+		<!-- Main Header -->
+		<header th:replace="common/header :: main-header"></header>
+		<div class="content-wrapper"
+			sec:authorize="hasRole('ROLE_LABORATORY_DOCTOR')">
+			<div class="container">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						Dashboard <small>Laboratory Panel</small>
+					</h1>
+				</section>
+				<!-- /.content -->
+				<section class="content">
+					<!-- Small boxes (Stat box) -->
+					<div class="row">
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-aqua">
+								<div class="inner">
+									<h3 th:text="${pcount}"></h3>
+									<p>New Exam Request</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-bag"></i>
+								</div>
+								<a href="#" class="small-box-footer">More info <i
+									class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-green">
+								<div class="inner">
+									<h3 th:text="${countresults}"></h3>
+									<p>Exam Results</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-stats-bars"></i>
+								</div>
+								<a href="#" class="small-box-footer">More info <i
+									class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Patients @</h3>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<table id="patients" class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>Patient Tracking Number</th>
+									<th>View Exam</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr th:each="exam, iStat: ${pExam}">
+									<td th:text="${iStat.index+1}" />
+									<td th:text="${exam.admissionInfo.admittedPatient.fname}" />
+									<td th:text="${exam.admissionInfo.admittedPatient.lname}" />
+									<td th:text="${exam.admissionInfo.patientTrackingNumber}" />
+									<td><a class="btn btn-block btn-primary btn-sm"
+										th:href="@{'/labo/' + ${exam.admissionInfo.patientTrackingNumber}}">View
+											Exams </a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Results</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<table id="patients" class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>First Name</th>
+												<th>Last Name</th>
+												<th>Patient Tracking Number</th>
+												<th>results</th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr th:each="admission, iStat: ${presults}">
+												<td th:text="${iStat.index+1}" />
+												<td
+													th:text="${admission.admissionInfo.admittedPatient.fname}" />
+												<td
+													th:text="${admission.admissionInfo.admittedPatient.lname}" />
+												<td
+													th:text="${admission.admissionInfo.patientTrackingNumber}" />
+												<td><a class="btn btn-block btn-primary btn-sm"
+													th:href="@{'/showresults/' + ${admission.admissionInfo.patientTrackingNumber}}">results
+												</a></td>
+											</tr>
+										</tbody>
+									</table>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- ADMIN container -->
+		<div class="content-wrapper" sec:authorize="hasRole('ROLE_ADMIN')">
+			<div class="container">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						Dashboard <small>Admin Panel</small>
+					</h1>
+				</section>
+				<!-- /.content -->
+				<section class="content">
+					<!-- Small boxes (Stat box) -->
+					<div class="row">
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-aqua">
+								<div class="inner">
+									<h3 th:text="${doctorsize}"></h3>
+									<p>Registered Users</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-bag"></i>
+								</div>
+								<a href="/" class="small-box-footer">More info <i
+									class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-green">
+								<div class="inner">
+									<h3 th:text="${hospitals}"></h3>
+									<p>Registered Hospitals</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-stats-bars"></i>
+								</div>
+								<a href="/listHospital" class="small-box-footer">More info <i
+									class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">All Users</h3>
+							</div>
+							<div class="col-xs-12">
+								<a class="btn btn-success pull-left" href="/docregistration">
+									<i class="fa fa-user"></i> Register New User
+								</a>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<table id="patients" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>First Name</th>
+											<th>Last Name</th>
+											<th>Phone Number</th>
+											<th>Email</th>
+											<th>Hospital</th>
+											<th>Department</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="doctor, iStat: ${doctors}">
+											<td th:text="${iStat.index+1}" />
+											<td th:text="${doctor.fname}" />
+											<td th:text="${doctor.lname}" />
+											<td th:text="${doctor.phone}" />
+											<td th:text="${doctor.email}" />
+											<td th:text="${doctor.hospital.hospitalName}" />
+											<td th:if="${doctor.depertment != null}"
+												th:text="${doctor.depertment.name}" />
+											<td th:if="${doctor.depertment == null}">NO DPT ASSIGNED</td>
+											<td><a class="btn btn-info" href="#"> <i
+													class="fa fa-info"></i>
+											</a> <a class="btn btn-primary" href="#"> <i
+													class="fa fa-warning"></i>
+											</a><a class="btn btn-success"
+												th:if="${doctor.depertment == null}"
+												th:href="@{'/department/' + ${doctor.employeeId}}"> <i
+													class="fa fa-plus"></i>
+
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="content-wrapper"
+			sec:authorize="hasRole('ROLE_GENERAL_DOCTOR')">
+			<div class="container">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						Dashboard <small>General Doctor Panel</small>
+					</h1>
+				</section>
+				<!-- /.content -->
+				<section class="content">
+					<!-- Small boxes (Stat box) -->
+					<div class="row">
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-aqua">
+								<div class="inner">
+									<h3 th:text="${admissions}"></h3>
+									<p>New Admissions</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-bag"></i>
+								</div>
+								<a href="#" class="small-box-footer">More info <i
+									class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-green">
+								<div class="inner">
+									<h3 th:text="${patientsSize}"></h3>
+									<p>Consulted Patients</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-stats-bars"></i>
+								</div>
+								<a href="#" class="small-box-footer">More info <i
+									class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+					</div>
+				</section>
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Admissions</h3>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<table id="patient" class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>First Name</th>
+									<th>Last Name</th>
+									<th>Patient Tracking Number</th>
+									<th>Admission Date</th>
+									<th>Consultation</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr th:each="admission, iStat: ${docAdmissions}">
+									<td th:text="${iStat.index+1}" />
+									<td th:text="${admission.admittedPatient.fname}" />
+									<td th:text="${admission.admittedPatient.lname}" />
+									<td th:text="${admission.patientTrackingNumber}" />
+									<td th:text="${admission.admissionDate}" />
+									<td><a class="btn btn-block btn-primary btn-sm"
+										th:href="@{'/consultation/' + ${admission.patientTrackingNumber}}">Consult
+									</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Consulted Patients</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<table id="patients" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>First Name</th>
+											<th>Last Name</th>
+											<th>Patient Tracking Number</th>
+											<th>Exams</th>
+											<th>Details</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="p, iStat: ${consultedpatients}">
+											<td th:text="${iStat.index+1}" />
+											<td th:text="${p.admission.admittedPatient.fname}" />
+											<td th:text="${p.admission.admittedPatient.lname}" />
+											<td th:text="${p.admission.patientTrackingNumber}" />
+											<td th:if="${p.status=='MIDLE'} or ${p.status=='COMPLETE'}">YES</td>
+											<td th:if="${p.status=='PENDING'}">NO</td>
+											<td th:if="${p.status=='PENDING'}"><a
+												class="btn btn-block btn-primary btn-sm"
+												th:href="@{'/prescription/' + ${p.admission.patientTrackingNumber}}">Details
+											</a></td>
+											<td th:if="${p.status=='COMPLETE'}"><a
+												class="btn btn-block btn-primary btn-sm"
+												th:href="@{'/prescription/' + ${p.admission.patientTrackingNumber}}">results
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- Receptionist container -->
+		<div class="content-wrapper"
+			sec:authorize="hasRole('ROLE_RECEPTIONIST')">
+			<div class="container">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						Dashboard <small>Reception Panel</small>
+					</h1>
+				</section>
+				<!-- /.content -->
+				<section class="content">
+					<!-- Small boxes (Stat box) -->
+					<div class="row">
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-aqua">
+								<div class="inner">
+									<h3 th:text="${patientsSize}"></h3>
+									<p>Registered Patients</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-bag"></i>
+								</div>
+								<a href="#" class="small-box-footer">More info <i
+									class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-green">
+								<div class="inner">
+									<h3 th:text="${admissions}"></h3>
+									<p>Admissions Today</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-stats-bars"></i>
+								</div>
+								<a th:href="@{/admissions}" class="small-box-footer">More
+									info <i class="fa fa-arrow-circle-right"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</section>
+				<div class="row" th:if="${message != null}">
+					<span th:text="${message}" style="text-color: red;"></span>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Admitted Patients @</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<table id="patients" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Patient Number</th>
+											<th>First Name</th>
+											<th>Last Name</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="patient, iStat: ${admission}">
+											<td th:text="${iStat.index+1}" />
+											<td th:text="${patient.admittedPatient.patientNumber}" />
+											<td th:text="${patient.admittedPatient.fname}" />
+											<td th:text="${patient.admittedPatient.lname}" />
+											<td><a class="btn btn-info"
+												th:href="@{'/details/patient/' + ${patient.admittedPatient.patientNumber}}">
+													<i class="fa fa-info"></i>
+											</a> <a class="btn btn-primary"
+												th:href="@{'/details/admission/' + ${patient.admittedPatient.patientNumber}}">
+													<i class="fa fa-edit"></i>
+
+											</a><a class="btn btn-default"
+												th:if="${patient.admittedPatient.admissionStatus==true}"
+												th:href="@{'/patient/update/' + ${patient.admittedPatient.patientNumber}}">Update
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">All Patients</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<div class="col-xs-12">
+									<a class="btn btn-success pull-left" href="/registration">
+										<i class="fa fa-user"></i> Register New Patient
+									</a>
+								</div>
+								<table id="patient" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Patient Number</th>
+											<th>First Name</th>
+											<th>Last Name</th>
+											<th>Gender</th>
+											<th>Born On</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="patient, iStat: ${patients}">
+											<td th:text="${iStat.index+1}" />
+											<td th:text="${patient.patientNumber}" />
+											<td th:text="${patient.fname}" />
+											<td th:text="${patient.lname}" />
+											<td th:text="${patient.gender}" />
+											<td th:text="${patient.dateOfBirth}" />
+											<td><a class="btn btn-info"
+												th:href="@{'/details/patient/' + ${patient.patientNumber}}">
+													<i class="fa fa-info"></i>
+
+											</a> <a class="btn btn-primary"
+												th:href="@{'/details/admission/' + ${patient.patientNumber}}">
+													<i class="fa fa-edit"></i>
+
+											</a><a class="btn btn-success"
+												th:if="${patient.admissionStatus==false}"
+												th:href="@{'/admit/patient/' + ${patient.patientNumber}}">
+													<i class="fa fa-plus"></i>
+
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Main Footer -->
+
+		<footer th:replace="common/header :: footer"></footer>
+	</div>
+	<div th:replace="common/header :: body-bottom-scripts"></div>
+
+	<script>
+		$(function() {
+			$('#patients').DataTable({
+				'paging' : true,
+				'lengthChange' : false,
+				'searching' : true,
+				'ordering' : true,
+				'info' : true,
+				'autoWidth' : false,
+				'pageLength' : 4
+			})
+		})
+	</script>
+	<script>
+		$(function() {
+			$('#patient').DataTable({
+				'paging' : true,
+				'lengthChange' : false,
+				'searching' : true,
+				'ordering' : true,
+				'info' : true,
+				'autoWidth' : false,
+				'pageLength' : 4
+			})
+		})
+	</script>
+</body>
+</html>

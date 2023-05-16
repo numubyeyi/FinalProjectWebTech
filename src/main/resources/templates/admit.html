@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="common/header :: common-header"></head>
+<body class="hold-transition skin-blue fixed layout-top-nav">
+	<div class="wrapper">
+		<!-- Main Header -->
+		<header th:replace="common/header :: main-header"></header>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper"
+			sec:authorize="hasRole('ROLE_RECEPTIONIST')">
+			<!-- Content Header (Page header) -->
+			<div class="container">
+				<section class="content-header">
+					<h1>
+						Dashboard <small>Reception panel</small>
+					</h1>
+				</section>
+
+				<div class="row" th:if="${found==true}">
+					<div class="col-xs-12">
+						<div class="box">
+							<!-- /.box-header -->
+							<div class="box-body">
+								<table id="patients" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th>Patient Number</th>
+											<th>First Name</th>
+											<th>Last Name</th>
+											<th>Gender</th>
+											<th>Born On</th>
+											<th>Identification Number</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="patient: ${patients}">
+											<td th:text="${patient.patientNumber}" />
+											<td th:text="${patient.fname}" />
+											<td th:text="${patient.lname}" />
+											<td th:text="${patient.gender}" />
+											<td th:text="${patient.dateOfBirth}" />
+											<td th:text="${patient.identificationNumber}" />
+
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="row">
+					<div class="col-xs-5">
+						<!-- Horizontal Form -->
+						<div class="box box-info">
+							<div class="box-header with-border">
+								<h2 class="box-title">
+									Patient Biometrics--<span th:text="${patients.patientNumber}"></span>
+								</h2>
+							</div>
+							<!-- /.box-header -->
+							<!-- form start -->
+							<form class="form-horizontal" th:action="@{/patient/admission}"
+								th:object="${admission}" method="POST">
+								<div class="box-body">
+									<div class="form-group">
+										<input type="hidden" th:value="${patients.patientNumber}"
+											th:name="@{patientNumber}" class="form-control" />
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label">Blood
+											Pressure</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control"
+												th:field="*{bloodPressure}" placeholder="blood Pressure" /><span style="margin-left:10px;">[xxx/xx]</span>
+												<span class="error text-danger"
+											th:if="${#fields.hasErrors('bloodPressure')}"
+											th:errors="*{bloodPressure}"></span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label">Temperature</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control"
+												th:field="*{temperature}" placeholder="temperature" /><span style="margin-left:10px;">[Celcius]</span>
+												<span class="error text-danger"
+											th:if="${#fields.hasErrors('temperature')}"
+											th:errors="*{temperature}"></span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label">Heart
+											Rate</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control"
+												th:field="*{heartRate}" placeholder="heartRate" /><span style="margin-left:10px;">[bits/min]</span>
+												<span class="error text-danger"
+											th:if="${#fields.hasErrors('heartRate')}"
+											th:errors="*{heartRate}"></span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label">Height
+										</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" th:field="*{height}"
+												placeholder="height " /><span style="margin-left:10px;">[cm]</span>
+												<span class="error text-danger"
+											th:if="${#fields.hasErrors('height')}" th:errors="*{height}"></span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label">Weight</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" th:field="*{weight}"
+												placeholder="weight" /><span style="margin-left:10px;">[kg]</span>
+												<span class="error text-danger"
+											th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"></span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="inputEmail3" class="col-sm-4 control-label">Department</label>
+										<div class="col-sm-8">
+											<select th:field="*{departemtName}"
+												class="form-control col-md-7 col-xs-12">
+												<option th:each="departemts: ${departemt}"
+													th:value="${departemts.name}"
+													th:text="${departemts.name}"></option>
+											</select>
+											<span class="error text-danger"
+										th:if="${#fields.hasErrors('departemtName')}"
+										th:errors="*{departemtName}"></span>
+										</div>
+
+									</div>
+								</div>
+								<!-- /.box-body -->
+								<div class="box-footer">
+									<button type="submit" class="btn btn-info pull-right">Admit
+										Patient</button>
+								</div>
+								<!-- /.box-footer -->
+							</form>
+						</div>
+					</div>
+					<div class="col-xs-4"></div>
+				</div>
+
+			</div>
+		</div>
+		<footer th:replace="common/header :: footer"></footer>
+	</div>
+	<div th:replace="common/header :: body-bottom-scripts"></div>
+	<script>
+		$(function() {
+			//Datemask dd/mm/yyyy
+			$('#datemask').inputmask('dd/mm/yyyy', {
+				'placeholder' : 'dd/mm/yyyy'
+			})
+			//Datemask2 mm/dd/yyyy
+			$('#datemask2').inputmask('mm/dd/yyyy', {
+				'placeholder' : 'mm/dd/yyyy'
+			})
+			//Money Euro
+			$('[data-mask]').inputmask()
+
+			//Date range picker
+			$('#reservation').daterangepicker()
+			//Date range picker with time picker
+			$('#reservationtime').daterangepicker({
+				timePicker : true,
+				timePickerIncrement : 30,
+				format : 'MM/DD/YYYY h:mm A'
+			})
+			//Date range as a button
+			$('#daterange-btn').daterangepicker(
+					{
+						ranges : {
+							'Today' : [ moment(), moment() ],
+							'Yesterday' : [ moment().subtract(1, 'days'),
+									moment().subtract(1, 'days') ],
+							'Last 7 Days' : [ moment().subtract(6, 'days'),
+									moment() ],
+							'Last 30 Days' : [ moment().subtract(29, 'days'),
+									moment() ],
+							'This Month' : [ moment().startOf('month'),
+									moment().endOf('month') ],
+							'Last Month' : [
+									moment().subtract(1, 'month').startOf(
+											'month'),
+									moment().subtract(1, 'month')
+											.endOf('month') ]
+						},
+						startDate : moment().subtract(29, 'days'),
+						endDate : moment()
+					},
+					function(start, end) {
+						$('#daterange-btn span').html(
+								start.format('MMMM D, YYYY') + ' - '
+										+ end.format('MMMM D, YYYY'))
+					})
+
+			//Date picker
+			$('#datepicker').datepicker({
+				autoclose : true
+			})
+
+			//iCheck for checkbox and radio inputs
+			$('input[type="checkbox"].minimal, input[type="radio"].minimal')
+					.iCheck({
+						checkboxClass : 'icheckbox_minimal-blue',
+						radioClass : 'iradio_minimal-blue'
+					})
+			//Red color scheme for iCheck
+			$(
+					'input[type="checkbox"].minimal-red, input[type="radio"].minimal-red')
+					.iCheck({
+						checkboxClass : 'icheckbox_minimal-red',
+						radioClass : 'iradio_minimal-red'
+					})
+			//Flat red color scheme for iCheck
+			$('input[type="checkbox"].flat-red, input[type="radio"].flat-red')
+					.iCheck({
+						checkboxClass : 'icheckbox_flat-green',
+						radioClass : 'iradio_flat-green'
+					})
+
+			//Colorpicker
+			$('.my-colorpicker1').colorpicker()
+			//color picker with addon
+			$('.my-colorpicker2').colorpicker()
+
+			//Timepicker
+			$('.timepicker').timepicker({
+				showInputs : false
+			})
+		})
+	</script>
+</body>
+</html>

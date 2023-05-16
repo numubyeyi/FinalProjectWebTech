@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="common/header :: common-header">
+<style>
+.example-modal .modal {
+	position: relative;
+	top: auto;
+	bottom: auto;
+	right: auto;
+	left: auto;
+	display: block;
+	z-index: 1;
+}
+
+.example-modal .modal {
+	background: transparent !important;
+}
+</style>
+</head>
+<body class="hold-transition skin-blue fixed layout-top-nav">
+	<div class="wrapper">
+		<!-- Main Header -->
+		<header th:replace="common/header :: main-header"></header>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper"
+			sec:authorize="hasRole('ROLE_GENERAL_DOCTOR')">
+			<!-- Content Header (Page header) -->
+			<div class="container">
+				<div class="btn-group-vertical" style="margin-top: 30px;">
+					<a class="btn btn-success pull-left"
+						th:href="@{'/prescription/' + ${patientTrackingNumber}}">Back
+						To Consultation </a>
+				</div>
+				<div class="box-header">
+					<h1 class="box-title" th:text="${Message}"></h1>
+				</div>
+				<div class="row" style="height: 30px;" th:if="${patient}">
+					<div class="col-xs-12">
+						<div class="box-header">
+							<h3 class="box-title">Department Of</h3>
+							<h3 class="box-title" th:text="${department}"></h3>
+						</div>
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">
+									Medical Records Information for <span
+										th:text="${patient.patientNumber}"></span>
+								</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<table id="records" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Date</th>
+											<th>Hospital</th>
+											<th>Symptoms</th>
+											<th>Exams</th>
+											<th>Prescription</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr th:each="personalRecord, iStat: ${personalRecordList}">
+											<td th:text="${iStat.index+1}" />
+											<td th:text="${personalRecord.admission.admissionDate}" />
+											<td
+												th:text="${personalRecord.admission.hospital.hospitalCode}" />
+											<td th:text="${personalRecord.consultation.description}" />
+											<td><a
+												th:onclick="'javascript:viewExams(\'' + ${personalRecord.admission.patientTrackingNumber} +'\');'"
+												class="btn btn-info"><i class="material-icons">Medical
+														Exams</i></a></td>
+											<td th:if="${personalRecord.prescription !=null}"
+												th:text="${personalRecord.prescription.name}" />
+											<td th:if="${personalRecord.prescription == null}">N/A</td>
+										</tr>
+									</tbody>
+								</table>
+								<div id="exampleModalHolder"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal -->
+				<div class="modal fade" id="exampleModal" tabindex="-1"
+					role="dialog" aria-labelledby="exampleModalLabel"
+					aria-hidden="true" th:fragment="modalContents">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Exam Details
+									for</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<table id="records" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Exam Name</th>
+											<th>Date Taken</th>
+											<th>Results</th>
+											<th>Taken By</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="examRecord, iStat: ${examRecords}">
+											<td th:text="${iStat.index+1}" />
+											<td th:text="${examRecord.medicalExam.name}" />
+											<td th:text="${examRecord.datetaken}" />
+											<td th:text="${examRecord.results}" />
+											<td th:text="${examRecord.examResponseEmployee.fname}" />
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer th:replace="common/header :: footer"></footer>
+	</div>
+	<div th:replace="common/header :: body-bottom-scripts"></div>
+
+	<script>
+		$(function() {
+			$('#records').DataTable({
+				'paging' : true,
+				'lengthChange' : false,
+				'searching' : true,
+				'ordering' : true,
+				'info' : true,
+				'autoWidth' : false,
+				'pageLength' : 4
+			})
+		})
+	</script>
+	<script>
+		function viewExams(patientTrackingNumber) {
+			$.ajax({
+				url : "/exams/details/" + patientTrackingNumber,
+				success : function(response) {
+					console.log("Response: "+response);
+					$('#exampleModalHolder').html(response);
+					$('#exampleModal').modal('show');
+				}
+			});
+		}
+	</script>
+</body>
+</html>

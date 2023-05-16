@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="common/header :: common-header"></head>
+<body class="hold-transition skin-blue fixed layout-top-nav">
+	<div class="wrapper">
+		<!-- Main Header -->
+		<header th:replace="common/header :: main-header"></header>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper"
+			sec:authorize="hasRole('ROLE_RECEPTIONIST')">
+			<!-- Content Header (Page header) -->
+			<div class="container">
+				<section class="content-header">
+					<h1>
+						Dashboard <small>Reception panel</small>
+					</h1>
+				</section>
+				<section class="content">
+				<div class="row" th:if="${update==true}">
+						<div class="col-md-6">
+						<div class="box-header">
+										<span th:text="${message}" style="color: red;"></span>
+									</div>
+						<form class="form-horizontal" th:action="@{/patient/update}" th:object="${patient}"
+							method="POST">
+							<input type="hidden" th:value="${patientNumber}"
+								class="form-control" th:name="@{patientNumber}" />
+							<div class="box-body">
+								<button class="btn btn-block btn-social btn-bitbucket"> <i
+									class="fa fa-bitbucket"></i> close Admission
+								</button>
+								<a class="btn btn-block btn-social btn-bitbucket" href="/recptionist">Back
+												Home </a>
+							</div>
+						</form>
+					</div>
+					
+				</div>
+					<div class="row" th:if="${patientInfo==true}">
+						<div class="col-md-6">
+							<div class="box">
+								<div class="box-header with-border">
+									<h3 class="box-title">Patient Information Details</h3>
+								</div>
+								<!-- /.box-header -->
+								<div class="box-body">
+									<table class="table table-bordered">
+										<tr>
+											<td>First Name</td>
+											<td th:text="${patient.fname}" />
+										</tr>
+										<tr>
+											<td>Last Name</td>
+											<td th:text="${patient.lname}" />
+										</tr>
+										<tr>
+											<td>Gender</td>
+											<td th:text="${patient.gender}" />
+										</tr>
+										<tr>
+											<td>Address</td>
+											<td th:text="${patient.address}" />
+										</tr>
+										<tr>
+											<td>Born On</td>
+											<td th:text="${patient.dateOfBirth}" />
+										</tr>
+										<tr>
+											<td>P.Number</td>
+											<td th:text="${patient.patientNumber}" />
+										</tr>
+										<tr>
+											<td>Identification Number</td>
+											<td th:text="${patient.identificationNumber}" />
+										</tr>
+										<tr>
+											<td>Hospital</td>
+											<td th:text="${patient.hospital}" />
+										</tr>
+										<tr>
+											<td>Registered On</td>
+											<td th:text="${patient.registeredDate}" />
+										</tr>
+
+									</table>
+								</div>
+								<a class="btn btn-info pull-right" href="/recptionist">Back
+												Home </a>
+							</div>
+							<!-- /.box -->
+						</div>
+					</div>
+					<div class="row" th:if="${admissionInfo==true}">
+						<div class="col-xs-12">
+							<div class="box">
+								<div class="box-header">
+									<h3 class="box-title">Details On Patient's Admission
+										Informations</h3>
+								</div>
+								<div class="box-header">
+									<p class="box-title">Number Of Admission:</p>
+									<h3 class="box-title" th:text="${admissionNumber}"></h3>
+								</div>
+								<div class="box-body">
+									<table id="example1" class="table table-bordered table-striped">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Admission Date</th>
+												<th>Blood Pressure</th>
+												<th>Temperature</th>
+												<th>Heart Rate</th>
+												<th>Weight</th>
+												<th>Height</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="admission, iStat: ${admissionList}">
+												<td th:text="${iStat.index+1}" />
+												<td th:text="${admission.admissionDate}" />
+												<td th:text="${admission.bloodPressure}" />
+												<td th:text="${admission.temperature}" />
+												<td th:text="${admission.heartRate}" />
+												<td th:text="${admission.weight}" />
+												<td th:text="${admission.height}" />
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+								<a class="btn btn-info pull-right" href="/recptionist">Back
+												Home </a>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</section>
+			</div>
+		</div>
+		<footer th:replace="common/header :: footer"></footer>
+	</div>
+	<div th:replace="common/header :: body-bottom-scripts"></div>
+	
+</body>
+</html>
